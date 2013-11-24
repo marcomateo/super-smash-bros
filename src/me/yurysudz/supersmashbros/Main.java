@@ -60,8 +60,7 @@ public class Main extends JavaPlugin implements Listener
 	public static Boolean blockbreak;
 	public static Objective obj;
 	public static Location tempLoc;
-	public static HashMap<Player, Integer> inArena = new HashMap<Player, Integer>();
-	public static HashMap<Player, Integer> inArenaLobby = new HashMap<Player, Integer>();
+
 	static FileConfiguration config;
 	public static ScoreboardManager sbManager = Bukkit.getScoreboardManager();
 	public static Scoreboard sBoard = sbManager.getNewScoreboard();
@@ -70,6 +69,9 @@ public class Main extends JavaPlugin implements Listener
 	public static Objective livesInArena1 = sBoard.registerNewObjective("lives", "lives");
 	
 	public static HashMap<Player, Integer> lives = new HashMap<Player, Integer>();
+	public static HashMap<Player, String> inArenaLobby = new HashMap<Player, String>();
+	public static HashMap<Player, String> inArena = new HashMap<Player, String>();
+	public static HashMap<Player, Boolean> inLobby = new HashMap<Player, Boolean>();
 	private static boolean Player;
 
 
@@ -301,7 +303,8 @@ public class Main extends JavaPlugin implements Listener
 			{
 				if(!(getConfig().getString("arenas." + args[2] + ".lobby") == null))
 				{
-					inArena.put(player, Integer.valueOf(args[2]));
+					inLobby.put(player, false);
+					inArenaLobby.put(player, args[2]);
 					String configLocation = ("arenas." + args[2] + ".lobby");
 					getPlayerLocation(configLocation);
 					player.teleport(tempLoc);

@@ -44,9 +44,8 @@ public class MyBlockListener extends JavaPlugin implements Listener
 		World playerWorld = player.getWorld();
 		World ssbWorld = Bukkit.getWorld("world");
 		Boolean blockbreak = Main.blockbreak;
-		HashMap<Player, Integer> inArena = Main.inArena;
-		final Integer playerInArena = inArena.get(player);
-		if (!(Main.inArena.get(player) == 0))
+		final String playerInArena = Main.inArena.get(player);
+		if (!(Main.inArena.get(player) == "0") | !(Main.inArenaLobby.get(player) == "0") | Main.inLobby.get(player) == true)
 		{
 			event.setCancelled(true);
 		}

@@ -135,7 +135,7 @@ public class MyPlayerListener implements Listener
 		Player player = event.getPlayer();
 		
 		
-		if((!(Main.inArena.get(player) == 0)))
+		if((!(Main.inArena.get(player) == "0")))
 		{
 			if(Main.lives.get(player) > 0)
 			{
