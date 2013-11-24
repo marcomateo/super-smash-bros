@@ -272,6 +272,9 @@ public class Main extends JavaPlugin implements Listener
 			getPlayerLocation(configLocation);
 			player.teleport(tempLoc);
 			player.sendMessage(ChatColor.GREEN + "You have been teleported to the SSB lobby!");
+			inLobby.put(player, true);
+			inArenaLobby.put(player, "0");
+			inArena.put(player, "0");
 
 		}
 		if(args.length == 2)
@@ -305,6 +308,8 @@ public class Main extends JavaPlugin implements Listener
 				{
 					inLobby.put(player, false);
 					inArenaLobby.put(player, args[2]);
+					inArena.put(player, "0");
+					
 					String configLocation = ("arenas." + args[2] + ".lobby");
 					getPlayerLocation(configLocation);
 					player.teleport(tempLoc);

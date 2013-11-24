@@ -204,7 +204,7 @@ public class MyPlayerListener implements Listener
     public void PlayerMove(PlayerMoveEvent event)
     {
     	Player player = event.getPlayer();
-    	if(!(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR))
+    	if(!(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) && !(Main.inArena.get(player) == "0"))
     	{
     		jumped.put(player, false);
     		player.setAllowFlight(true);
