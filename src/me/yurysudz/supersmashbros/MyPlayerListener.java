@@ -158,7 +158,7 @@ public class MyPlayerListener implements Listener
 					event.setRespawnLocation(getPlayerLocation(configLocation));
 					player.sendMessage(Integer.toString(Main.lives.get(player)));
 					
-					Main.callPlayerScoreboard(player);
+					Main.setPlayerScoreboard(player);
 				}
 						
 			}

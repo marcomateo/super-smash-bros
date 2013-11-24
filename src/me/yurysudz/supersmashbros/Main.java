@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -72,6 +74,9 @@ public class Main extends JavaPlugin implements Listener
 	public static HashMap<Player, String> inArenaLobby = new HashMap<Player, String>();
 	public static HashMap<Player, String> inArena = new HashMap<Player, String>();
 	public static HashMap<Player, Boolean> inLobby = new HashMap<Player, Boolean>();
+	
+	public static HashMap<String, Integer> playersInArenaLobby = new HashMap<String, Integer>();
+	
 	private static boolean Player;
 
 
@@ -94,6 +99,8 @@ public class Main extends JavaPlugin implements Listener
 		blockbreak = false;
 
 		config = this.getConfig();
+		
+		timer1.schedule(task, 0, 1000);
 
 	}
 
@@ -310,6 +317,8 @@ public class Main extends JavaPlugin implements Listener
 					inArenaLobby.put(player, args[2]);
 					inArena.put(player, "0");
 					
+					
+					
 					String configLocation = ("arenas." + args[2] + ".lobby");
 					getPlayerLocation(configLocation);
 					player.teleport(tempLoc);
@@ -319,7 +328,16 @@ public class Main extends JavaPlugin implements Listener
 					
 					setPlayerScoreboard(player);
 					
+					startTimer(args[2], player);
 					
+					//playersInArenaLobby.put(args[2], playersInArenaLobby.get(args[2]) + 1);
+					
+					//if(playersInArenaLobby.get(args[2]) > 0)
+					//{
+						
+					//	startTimer(args[2], player);
+				//	}
+						
 				}
 
 				
@@ -360,7 +378,7 @@ public class Main extends JavaPlugin implements Listener
 	{
 
 		Player player = (Player)sender;
-		callPlayerScoreboard(player);
+		setPlayerScoreboard(player);
 
 	}
 	private void savePlayerLocation(CommandSender sender, Command cmd, String commandLabel, String configLocation, String[] args)
@@ -411,8 +429,66 @@ public class Main extends JavaPlugin implements Listener
 			
 			player.setScoreboard(sBoard);
 		}
-	public static void callPlayerScoreboard(Player player)
+	public void startTimer(String arena, final Player player)
 	{
-		setPlayerScoreboard(player);
+		//final Scoreboard newBoard = sbManager.getNewScoreboard();
+
+
+//
+    	//final Objective objective = newBoard.registerNewObjective("test", "dummy");
+    	//objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    	//objective.setDisplayName(ChatColor.GOLD + "Time Left:");
+
+    	
+
+    	
+    	Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+    	{
+        //	Scoreboard timerBoard = newBoard;
+        //	Objective timerObj = objective;
+        	
+        	int countdown = 30;
+        	
+    		public void run() 
+    		{
+    			countdown = countdown - 1; 
+    			
+    			player.sendMessage(Integer.toString(countdown));
+    		 
+    			//Score score = objective.getScore(null);
+    			//score.setScore(countdown);
+    			
+    			//if(countdown == 0) 
+    			//{
+    			//	plugin.getServer().getScheduler().cancelTasks(plugin);
+    				
+    			//}
+    		}
+    	}, 0L, 20L);
+
+
 	}
+	public void startCountdown() 
+	{
+		int CountDownValue = 61;
+		  public static boolean startCountDown = false;
+		  final Timer timer1 = new Timer();
+		  TimerTask task = new TimerTask() {
+		    public void run() {
+		      if(startCountDown == true){
+		 
+		      CountDownValue--;
+		 
+		      if (CountDownValue == 60 || CountDownValue == 50 || CountDownValue == 40 || CountDownValue == 30 || CountDownValue == 20 || CountDownValue < 11) {
+		        Bukkit.getServer().broadcastMessage(CountDownValue + " seconds remaining");
+		      }
+		      else if (CountDownValue == 0) {
+		        this.startCountDown = false;
+		        CountDownValue = 61;
+		        //insert your code here
+		      }
+		      }
+		    }
+		  };
+		}
 }
