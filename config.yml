@@ -1,0 +1,142 @@
+motd: Welcome to our server!
+ssbWorld: nothing
+lobbyLocation: Ntohing!
+  world: nothing
+  x: nothing
+  y: nothing
+  z: nothing
+  yaw: nothing
+  pictch: nothing
+arenas:
+  1:
+    lobby:
+      world:nothing
+      x: nothing
+      y: nothing
+      z: nothing
+      yaw: nothing
+      pictch: nothing
+    spectate:
+      world: nothing
+      x: nothing
+      y: nothing
+      z: nothing
+      yaw: nothing
+      pictch: nothing
+    spawns:
+      1:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      2:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      3:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      4:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+  2:
+    lobby:
+      world: nothing
+      x: nothing
+      y: nothing
+      z: nothing
+      yaw: nothing
+      pictch: nothing
+    spectate:
+      world: nothing
+      x: nothing
+      y: nothing
+      z: nothing
+      yaw: nothing
+      pictch: nothing
+    spawns:
+      1:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      2:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      3:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      4:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+  3:
+    lobby:
+      world: nothing
+      x: nothing
+      y: nothing
+      z: nothing
+      yaw: nothing
+      pictch: nothing
+    spectate:
+      world: nothing
+      x: nothing
+      y: nothing
+      z: nothing
+      yaw: nothing
+      pictch: nothing
+    spawns:
+      1:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      2:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      3:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
+      4:
+        world: nothing
+        x: nothing
+        y: nothing
+        z: nothing
+        yaw: nothing
+        pictch: nothing
