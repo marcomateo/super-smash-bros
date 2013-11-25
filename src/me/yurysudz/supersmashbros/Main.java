@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -45,6 +44,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
+@SuppressWarnings("unused")
 public class Main extends JavaPlugin implements Listener
 {
 	final static String fewArguments = "Too Little Arguments!";	
@@ -74,8 +74,12 @@ public class Main extends JavaPlugin implements Listener
 	public static HashMap<Player, String> inArenaLobby = new HashMap<Player, String>();
 	public static HashMap<Player, String> inArena = new HashMap<Player, String>();
 	public static HashMap<Player, Boolean> inLobby = new HashMap<Player, Boolean>();
+	public static HashMap<String, Integer> timeLeftInLobby = new HashMap<String, Integer>();
+	public static HashMap<String, Objective> lobbyObjective = new HashMap<String, Objective>();
 	
-	public static HashMap<String, Integer> playersInArenaLobby = new HashMap<String, Integer>();
+	
+	
+	public static HashMap<String, ArrayList<Player>> playersInArenaLobby = new HashMap<String, ArrayList<Player>>();
 	
 	private static boolean Player;
 
@@ -100,7 +104,7 @@ public class Main extends JavaPlugin implements Listener
 
 		config = this.getConfig();
 		
-		timer1.schedule(task, 0, 1000);
+		timer();
 
 	}
 
@@ -244,6 +248,11 @@ public class Main extends JavaPlugin implements Listener
 	{
 		Player player = (Player)sender;
 		
+		if(args.length == 0)
+		{
+			return;
+		}
+		
 		if(args[0].equalsIgnoreCase("lobby"))
 			ssbLobby(sender, cmd, commandLabel, args);
 		if(args[0].equalsIgnoreCase("arena"))
@@ -307,15 +316,15 @@ public class Main extends JavaPlugin implements Listener
 			player.sendMessage(ChatColor.GREEN + "'/ssb arena join [number]'    Join the arena number that you specify");
 			player.sendMessage(ChatColor.GREEN + "'/ssb arena leave'               Leave the arena you're in");
 			
-			
+			return;			
 		}
-		else if(args[1].equalsIgnoreCase("join"))
+		if(args[1].equalsIgnoreCase("join"))
 			{
-				if(!(getConfig().getString("arenas." + args[2] + ".lobby") == null))
+				if(getConfig().getString("arenas." + args[2] + ".lobby") != null)
 				{
 					inLobby.put(player, false);
 					inArenaLobby.put(player, args[2]);
-					inArena.put(player, "0");
+					inArena.put(player, "");
 					
 					
 					
@@ -328,7 +337,23 @@ public class Main extends JavaPlugin implements Listener
 					
 					setPlayerScoreboard(player);
 					
-					startTimer(args[2], player);
+					
+					if (!playersInArenaLobby.containsKey(args[2]))
+							{
+								ArrayList<Player> playersIn = new ArrayList<Player>();
+								playersIn.add(player);
+								playersInArenaLobby.put(args[2], playersIn);
+							}
+					else
+					{
+						ArrayList<Player> playersIn = playersInArenaLobby.get(args[2]);
+						playersIn.add(player);
+						playersInArenaLobby.put(args[2], playersIn);
+						Integer numberOfPlayers = playersIn.size();
+						if (numberOfPlayers == 2)
+							timeLeftInLobby.put(args[2], 30);
+					
+					}
 					
 					//playersInArenaLobby.put(args[2], playersInArenaLobby.get(args[2]) + 1);
 					
@@ -342,7 +367,7 @@ public class Main extends JavaPlugin implements Listener
 
 				
 			}
-		else if(args[1].equalsIgnoreCase("set"))
+		if(args[1].equalsIgnoreCase("set"))
 		{
 			if(args[2].equalsIgnoreCase("lobby"))
 			{
@@ -360,7 +385,7 @@ public class Main extends JavaPlugin implements Listener
 			{
 				if(args.length == 5)
 				{
-					String configLocation = ("arenas." + args[3] + ".lobby");
+					String configLocation = ("arenas." + args[3] + ".spawns." + args[4]);
 					savePlayerLocation(sender, cmd, commandLabel, configLocation, args);
 					
 					
@@ -431,7 +456,7 @@ public class Main extends JavaPlugin implements Listener
 		}
 	public void startTimer(String arena, final Player player)
 	{
-		//final Scoreboard newBoard = sbManager.getNewScoreboard();
+		// TODO final Scoreboard newBoard = sbManager.getNewScoreboard();
 
 
 //
@@ -441,54 +466,84 @@ public class Main extends JavaPlugin implements Listener
 
     	
 
-    	
-    	Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
-    	{
-        //	Scoreboard timerBoard = newBoard;
-        //	Objective timerObj = objective;
-        	
-        	int countdown = 30;
-        	
-    		public void run() 
-    		{
-    			countdown = countdown - 1; 
-    			
-    			player.sendMessage(Integer.toString(countdown));
-    		 
-    			//Score score = objective.getScore(null);
-    			//score.setScore(countdown);
-    			
-    			//if(countdown == 0) 
-    			//{
-    			//	plugin.getServer().getScheduler().cancelTasks(plugin);
-    				
-    			//}
-    		}
-    	}, 0L, 20L);
+		int taskId;
+    	Runnable r = new Runnable()
+		{
+			Integer time = 30;
 
+			public void run() 
+			{
+				time --;
+				// TODO Auto-generated method stub
+				player.sendMessage(Integer.toString(time));
+				
+				if(time == 0)	
+				{
+					
+					// TODO SBukkit.getServer().getScheduler().cancelTask(taskId);
 
+				}	
+			}	
+		};
+		taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, r, 0L, 20L);		
 	}
-	public void startCountdown() 
+	public void timer()
 	{
-		int CountDownValue = 61;
-		  public static boolean startCountDown = false;
-		  final Timer timer1 = new Timer();
-		  TimerTask task = new TimerTask() {
-		    public void run() {
-		      if(startCountDown == true){
-		 
-		      CountDownValue--;
-		 
-		      if (CountDownValue == 60 || CountDownValue == 50 || CountDownValue == 40 || CountDownValue == 30 || CountDownValue == 20 || CountDownValue < 11) {
-		        Bukkit.getServer().broadcastMessage(CountDownValue + " seconds remaining");
-		      }
-		      else if (CountDownValue == 0) {
-		        this.startCountDown = false;
-		        CountDownValue = 61;
-		        //insert your code here
-		      }
-		      }
-		    }
-		  };
-		}
+
+		int taskId;
+    	Runnable r = new Runnable()
+		{
+			Integer time = 30;
+
+			public void run() 
+			{
+				
+				for(String arena : timeLeftInLobby.keySet())
+				{
+					timeLeftInLobby.put(arena, timeLeftInLobby.get(arena) - 1);
+					
+					Scoreboard newBoard = sbManager.getNewScoreboard();
+					Objective objective = newBoard.registerNewObjective("test", "dummy");
+					objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+					objective.setDisplayName(ChatColor.GOLD +"Arena Starting!");
+					
+					
+					ArrayList<Player> playersIn = playersInArenaLobby.get(arena);
+					for (Player p: playersIn)
+					{
+						if(timeLeftInLobby.get(arena) < 20)
+						{
+							p.sendMessage(ChatColor.RED + "START");
+							timeLeftInLobby.remove(arena);
+							
+							inLobby.put(p, false);
+							inArenaLobby.put(p, "0");
+							inArena.put(p, arena);
+							
+							Integer spawn = 1 + (int)(Math.random() * ((4 - 1) + 1));
+							
+							String configLocation = ("arenas."+ arena + ".spawns." + spawn);
+							getPlayerLocation(configLocation);
+							p.teleport(tempLoc);
+							
+							lives.put(p, Integer.valueOf("5"));
+							
+							
+							setPlayerScoreboard(p);
+							
+						}
+						else
+						{
+							Score score = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Time Left:"));
+							score.setScore(timeLeftInLobby.get(arena));
+							p.setScoreboard(newBoard);
+						}
+					}
+					
+				}
+			}	
+		};
+		taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, r, 0L, 20L);		
+	}
+	
 }
